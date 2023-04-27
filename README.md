@@ -7,4 +7,13 @@ sdk: docker
 pinned: false
 ---
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+# Thai XGLM api
+
+# build docker
+
+    docker build -t steerapi/xglm .
+
+# run docker
+    
+    docker run -p 7860:7860 -v `pwd`/.cache:/home/user/.cache -t steerapi/xglm
+
