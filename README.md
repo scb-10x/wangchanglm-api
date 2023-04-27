@@ -17,6 +17,15 @@ pinned: false
     
     docker run -p 7860:7860 -v `pwd`/.cache:/home/user/.cache -t steerapi/xglm
 
+# try with curl
+
+    curl --request POST \
+      --url http://localhost:7860/generate \
+      --header 'Content-Type: application/json' \
+      --cookie session-space-cookie=730e8af02a9acbbdb0e941d63f05d41e \
+      --data '{
+      "input": "hello"
+    }'
 # how to deploy on hugging face
 1. create a new space on hugging face https://huggingface.co/new-space
 2. add ssh public key to hugging face via https://huggingface.co/settings/keys
