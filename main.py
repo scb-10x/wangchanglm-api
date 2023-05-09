@@ -39,9 +39,10 @@ class Input(BaseModel):
 @app.post("/generate")
 def generate(input: Input):
     batch = tokenizer(input.input, return_tensors="pt")
+    input_ids = batch["input_ids"].to('cuda')
     with torch.cuda.amp.autocast(): 
         output_tokens = model.generate(
-            input_ids=batch["input_ids"],
+            input_ids=input_ids,
             max_new_tokens=input.max_length,  # 512
             begin_suppress_tokens=[],
             no_repeat_ngram_size=input.no_repeat_ngram_size,

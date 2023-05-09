@@ -11,21 +11,24 @@ pinned: false
 
 # build docker
 
-    docker build -t steerapi/xglm .
+    docker build -t scb10x/thaillm .
 
 # run docker
     
-    docker run -p 7860:7860 -v `pwd`/.cache:/home/user/.cache -t steerapi/xglm
+    docker run --restart unless-stopped -p 80:7860 -v `pwd`/.cache:/home/user/.cache -dt scb10x/thaillm
+    # on gpu
+    docker run --gpus all --restart unless-stopped -p 80:7860 -v `pwd`/.cache:/home/user/.cache -dt scb10x/thaillm
 
 # try with curl
 
     curl --request POST \
-      --url http://localhost:7860/generate \
+      --url http://localhost:80/generate \
       --header 'Content-Type: application/json' \
       --cookie session-space-cookie=730e8af02a9acbbdb0e941d63f05d41e \
       --data '{
       "input": "hello"
     }'
+
 # how to deploy on hugging face
 1. create a new space on hugging face https://huggingface.co/new-space
 2. add ssh public key to hugging face via https://huggingface.co/settings/keys
