@@ -33,6 +33,7 @@ pinned: false
     }'
 
 # how to deploy on hugging face
+
 1. create a new space on hugging face https://huggingface.co/new-space
 2. add ssh public key to hugging face via https://huggingface.co/settings/keys
 3. add hf as remote repo (change the repo path to your hugging face space)
@@ -42,3 +43,20 @@ pinned: false
 4. push to hf
 
     git push huggingface main
+
+
+# deploy on GCP
+
+## create a vm
+1. Compute Engine > Create an instance
+2. GPUs > NVIDIA T4 (could try with better gpu for faster inference)
+3. Machine Type > n1-standard-8 (could try with less memory machine)
+4. Boot disk > Switch Image > Debian 10 based Deep Learning VM with M108 > 250GB
+5. Firewall > Allow HTTP traffic > Allow HTTPS traffic
+6. Create
+
+## ssh into the vm and build
+
+1. build docker as in build docker section and 
+2. run docker as run docker section
+
