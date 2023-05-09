@@ -14,7 +14,10 @@ pinned: false
     docker build -t scb10x/thaillm .
 
 # run docker
-    
+
+    mkdir .cache #optional
+    chmod 777 .cache #optional
+    # on cpu
     docker run --restart unless-stopped -p 80:7860 -v `pwd`/.cache:/home/user/.cache -dt scb10x/thaillm
     # on gpu
     docker run --gpus all --restart unless-stopped -p 80:7860 -v `pwd`/.cache:/home/user/.cache -dt scb10x/thaillm
