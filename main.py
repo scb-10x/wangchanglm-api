@@ -63,7 +63,7 @@ def format_prompt(params: GenerateParams):
         prompt = PROMPT_FORMATS['no_context'].format_map(
             {'instruction': params.instruction, 'context': ''})
     else:
-        prompt = PROMPT_FORMATS['wiht_context'].format_map(
+        prompt = PROMPT_FORMATS['with_context'].format_map(
             {'instruction': params.instruction, 'context': params.context})
     return prompt
 
