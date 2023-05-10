@@ -45,7 +45,7 @@ class ResponseParams(BaseModel):
     prompt: str | None = None
     params: dict | None = None
 class GenerateParams(BaseModel):
-    instruction: str = ""
+    instruction: str
     context: str = ""
     max_length: int = 64
     no_repeat_ngram_size: int = 2
