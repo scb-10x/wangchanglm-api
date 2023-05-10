@@ -64,12 +64,8 @@ class GenerateParams(BaseModel):
     top_p: float = 0.95
     typical_p: float = 1.
     temperature: float = 0.9
-    num_beams: int = 1
     begin_suppress_tokens: list[int] | None = None
     suppress_tokens: list[int] | None = None
-    bad_words_ids: list[list[int]] | None = None
-    force_words_ids: list[list[int]] | None = None
-
 
 def format_prompt(params: GenerateParams):
     """
@@ -87,8 +83,6 @@ def format_prompt(params: GenerateParams):
             - num_beams (int): The number of beams to use for beam search.
             - begin_suppress_tokens (list[int]): A list of tokens to suppress at the beginning of the generation.
             - suppress_tokens (list[int]): A list of tokens to suppress at generation.
-            - bad_words_ids (list[list[int]]): A list of lists of tokens to avoid generating.
-            - force_words_ids (list[list[int]]): A list of lists of tokens to force generating.            
 
     Returns:
         str: The formatted prompt string.
@@ -119,8 +113,6 @@ def generate(params: GenerateParams) -> ResponseParams:
             num_beams=params.num_beams,
             suppress_tokens=params.suppress_tokens,
             begin_suppress_tokens=params.begin_suppress_tokens,
-            bad_words_ids=params.bad_words_ids,
-            force_words_ids=params.force_words_ids,
 
             no_repeat_ngram_size=params.no_repeat_ngram_size,
 
