@@ -38,8 +38,14 @@ model = AutoModelForCausalLM.from_pretrained(
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 
+class ResponseParams(BaseModel):
+    status: str = "ok"
+    output: str | None = None
+    message: str | None = None
+    prompt: str | None = None
+    params: dict | None = None
 class GenerateParams(BaseModel):
-    instruction: str
+    instruction: str = ""
     context: str = ""
     max_length: int = 64
     no_repeat_ngram_size: int = 2
@@ -47,10 +53,11 @@ class GenerateParams(BaseModel):
     top_p: float = 0.95
     typical_p: float = 1.
     temperature: float = 0.9
-    begin_suppress_tokens: list[int] = []
-    suppress_tokens: list[int] = []
-    bad_words_ids: list[list[int]] = []
-    force_words_ids: list[list[int]] = []
+    num_beams: int = 1
+    begin_suppress_tokens: list[int] | None = None
+    suppress_tokens: list[int] | None = None
+    bad_words_ids: list[list[int]] | None = None
+    force_words_ids: list[list[int]] | None = None
 
 
 def format_prompt(params: GenerateParams):
@@ -66,6 +73,7 @@ def format_prompt(params: GenerateParams):
             - top_k (int): The number of highest probability vocabulary tokens to keep for top-k-filtering.
             - top_p (float): If set to float < 1, only the smallest set of most probable tokens with probabilities that add up to top_p or higher are kept for generation.
             - temperature (float): The temperature to use for sampling.
+            - num_beams (int): The number of beams to use for beam search.
             - begin_suppress_tokens (list[int]): A list of tokens to suppress at the beginning of the generation.
             - suppress_tokens (list[int]): A list of tokens to suppress at generation.
             - bad_words_ids (list[list[int]]): A list of lists of tokens to avoid generating.
@@ -85,17 +93,19 @@ def format_prompt(params: GenerateParams):
 
 ### ROUTES ###
 
-@app.post("/generate")
-def generate(params: GenerateParams):
-    prompt = format_prompt(params)
-    # print(f"Prompt: {prompt}")
+@app.post("/generate", response_model=ResponseParams)
+def generate(params: GenerateParams) -> ResponseParams:
+    try:
+        prompt = format_prompt(params)
+        # print(f"Prompt: {prompt}")
+        # print(f"params: {params}")
 
-    batch = tokenizer(prompt, return_tensors="pt")
-    input_ids = batch["input_ids"].to('cuda')
-    with torch.cuda.amp.autocast():
+        batch = tokenizer(prompt, return_tensors="pt")
+        input_ids = batch["input_ids"]
         output_tokens = model.generate(
             input_ids=input_ids,
             max_new_tokens=params.max_length,  # 512
+            num_beams=params.num_beams,
             suppress_tokens=params.suppress_tokens,
             begin_suppress_tokens=params.begin_suppress_tokens,
             bad_words_ids=params.bad_words_ids,
@@ -114,6 +124,8 @@ def generate(params: GenerateParams):
             # temperature = 0.8,
             # repetition_penalty = 1.2,
         )
-    output = tokenizer.decode(output_tokens[0], skip_special_tokens=True)
-    # output = pipe(f"{input.input}", max_length=input.max_length)
-    return {"output": output}
+        output = tokenizer.decode(output_tokens[0], skip_special_tokens=True)
+        # output = pipe(f"{input.input}", max_length=input.max_length)
+        return {"status": "ok", "output": output, "prompt": prompt, "params": params}
+    except Exception as e:
+        return {"status": "error", "message": f"{e}"}
