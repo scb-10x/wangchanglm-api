@@ -94,7 +94,7 @@ def generate(params: GenerateParams) -> ResponseParams:
         # print(f"params: {params}")
 
         batch = tokenizer(prompt, return_tensors="pt")
-        input_ids = batch["input_ids"]
+        input_ids = batch["input_ids"].to("cuda" if torch.cuda.is_available() else "cpu")
         output_tokens = model.generate(
             input_ids=input_ids,
             max_new_tokens=params.max_length,  # 512
