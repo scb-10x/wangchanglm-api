@@ -1,7 +1,7 @@
 # read the doc: https://huggingface.co/docs/hub/spaces-sdks-docker
 # you will also find guides on how best to write your Dockerfile
 
-FROM python:3.10
+FROM wallies/python-cuda:3.10-cuda11.6-runtime
 
 WORKDIR /code
 
@@ -20,7 +20,13 @@ ENV HOME=/home/user \
 # Set the working directory to the user's home directory
 WORKDIR $HOME/app
 
+#RUN pip install bitsandbytes-cuda117
+
+#RUN python3 -c 'import torch; from transformers import AutoModelForCausalLM; AutoModelForCausalLM.from_pretrained("pythainlp/wangchanglm-7.5B-sft-enth",return_dict=False,load_in_8bit=True,device_map="auto",torch_dtype=torch.float16)'
+
 # Copy the current directory contents into the container at $HOME/app setting the owner to the user
 COPY --chown=user . $HOME/app
+
+# RUN pip install bitsandbytes-cuda117
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]
