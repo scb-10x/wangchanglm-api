@@ -1,7 +1,7 @@
 # read the doc: https://huggingface.co/docs/hub/spaces-sdks-docker
 # you will also find guides on how best to write your Dockerfile
 
-FROM huggingface/transformers-pytorch-gpu
+FROM python:3.10
 
 WORKDIR /code
 
