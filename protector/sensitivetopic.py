@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List
 
 import numpy as np
+import tensorflow
 import tensorflow_hub as hub
 import tensorflow_text
 
@@ -86,16 +87,13 @@ class SensitiveTopicProtector:
         return cls(sensitive_topics=sensitive_topics, encoder=encoder, default_sensitivity=default_sensitivity)
 
 
-import pickle
 import os
 
 def loadGuardian():  
   # get current directory of this script
   current_directory = os.path.dirname(os.path.abspath(__file__))
   # load sensitive_topics.pkl in current_directory
-  f = open(os.path.join(current_directory, "sensitive_topics.pkl"), "rb")
-  sensitive_topics = pickle.load(f)
-  f.close()
+  sensitive_topics = np.load(os.path.join(current_directory, "sensitive_topics.npy"), allow_pickle=True)
 
   guardian = SensitiveTopicProtector.fromRaw(sensitive_topics)
   return guardian

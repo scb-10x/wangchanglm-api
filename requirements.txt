@@ -6,8 +6,8 @@ transformers==4.*
 uvicorn[standard]==0.17.*
 protobuf==3.20.*
 pydantic==1.10.7
-accelerate
-bitsandbytes
-tensorflow_text
-tensorflow_hub
-tensorflow
+accelerate==0.19.*
+bitsandbytes==0.38.*
+tensorflow_text==2.12.*
+tensorflow_hub==0.13.*
+tensorflow==2.12.*

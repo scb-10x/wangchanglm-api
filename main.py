@@ -1,4 +1,3 @@
-from protector.sensitivetopic import loadGuardian
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -39,6 +38,7 @@ model = AutoModelForCausalLM.from_pretrained(
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 # guardian
+from protector.sensitivetopic import loadGuardian
 guardian = loadGuardian()
 
 
