@@ -96,6 +96,8 @@ def format_prompt(params: GenerateParams):
 @app.post("/generate", response_model=ResponseParams)
 def generate(params: GenerateParams) -> ResponseParams:
     try:
+        prompt = format_prompt(params)
+
         is_sensitive, respond_message = guardian.filter(params.instruction)
         if is_sensitive:
             return {"status": "ok", "is_sensitive": is_sensitive, "output": respond_message, "prompt": prompt, "params": params}
@@ -103,7 +105,6 @@ def generate(params: GenerateParams) -> ResponseParams:
         if is_sensitive:
             return {"status": "ok", "is_sensitive": is_sensitive, "output": respond_message, "prompt": prompt, "params": params}
 
-        prompt = format_prompt(params)
         # print(f"Prompt: {prompt}")
         # print(f"params: {params}")
 
