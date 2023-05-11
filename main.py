@@ -1,3 +1,4 @@
+from protector.sensitivetopic import loadGuardian
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -37,6 +38,9 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
+# guardian
+guardian = loadGuardian()
+
 
 class ResponseParams(BaseModel):
     status: str = "ok"
@@ -44,6 +48,8 @@ class ResponseParams(BaseModel):
     message: str | None = None
     prompt: str | None = None
     params: dict | None = None
+    is_sensitive: bool = False
+
 class GenerateParams(BaseModel):
     instruction: str
     context: str = ""
@@ -55,6 +61,7 @@ class GenerateParams(BaseModel):
     temperature: float = 0.9
     begin_suppress_tokens: list[int] | None = None
     suppress_tokens: list[int] | None = None
+
 
 def format_prompt(params: GenerateParams):
     """
@@ -89,12 +96,20 @@ def format_prompt(params: GenerateParams):
 @app.post("/generate", response_model=ResponseParams)
 def generate(params: GenerateParams) -> ResponseParams:
     try:
+        is_sensitive, respond_message = guardian.filter(params.instruction)
+        if is_sensitive:
+            return {"status": "ok", "is_sensitive": is_sensitive, "output": respond_message, "prompt": prompt, "params": params}
+        is_sensitive, respond_message = guardian.filter(params.input)
+        if is_sensitive:
+            return {"status": "ok", "is_sensitive": is_sensitive, "output": respond_message, "prompt": prompt, "params": params}
+
         prompt = format_prompt(params)
         # print(f"Prompt: {prompt}")
         # print(f"params: {params}")
 
         batch = tokenizer(prompt, return_tensors="pt")
-        input_ids = batch["input_ids"].to("cuda" if torch.cuda.is_available() else "cpu")
+        input_ids = batch["input_ids"].to(
+            "cuda" if torch.cuda.is_available() else "cpu")
         output_tokens = model.generate(
             input_ids=input_ids,
             max_new_tokens=params.max_length,  # 512
