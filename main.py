@@ -99,7 +99,7 @@ def generate(params: GenerateParams) -> ResponseParams:
         is_sensitive, respond_message = guardian.filter(params.instruction)
         if is_sensitive:
             return {"status": "ok", "is_sensitive": is_sensitive, "output": respond_message, "prompt": prompt, "params": params}
-        is_sensitive, respond_message = guardian.filter(params.input)
+        is_sensitive, respond_message = guardian.filter(params.context)
         if is_sensitive:
             return {"status": "ok", "is_sensitive": is_sensitive, "output": respond_message, "prompt": prompt, "params": params}
 
