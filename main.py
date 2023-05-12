@@ -37,6 +37,10 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
+# guardian
+from protector.sensitivetopic import loadGuardian
+guardian = loadGuardian()
+
 
 class ResponseParams(BaseModel):
     status: str = "ok"
@@ -44,6 +48,8 @@ class ResponseParams(BaseModel):
     message: str | None = None
     prompt: str | None = None
     params: dict | None = None
+    is_sensitive: bool = False
+
 class GenerateParams(BaseModel):
     instruction: str
     context: str = ""
@@ -55,6 +61,7 @@ class GenerateParams(BaseModel):
     temperature: float = 0.9
     begin_suppress_tokens: list[int] | None = None
     suppress_tokens: list[int] | None = None
+
 
 def format_prompt(params: GenerateParams):
     """
@@ -90,11 +97,22 @@ def format_prompt(params: GenerateParams):
 def generate(params: GenerateParams) -> ResponseParams:
     try:
         prompt = format_prompt(params)
+
+        is_sensitive, respond_message = guardian.filter(params.instruction)
+        if is_sensitive:
+            return {"status": "ok", "is_sensitive": is_sensitive, "output": respond_message, "prompt": prompt, "params": params}
+        # check if context is available in params
+        if params.context != "":
+            is_sensitive, respond_message = guardian.filter(params.context)
+            if is_sensitive:
+                return {"status": "ok", "is_sensitive": is_sensitive, "output": respond_message, "prompt": prompt, "params": params}
+
         # print(f"Prompt: {prompt}")
         # print(f"params: {params}")
 
         batch = tokenizer(prompt, return_tensors="pt")
-        input_ids = batch["input_ids"].to("cuda" if torch.cuda.is_available() else "cpu")
+        input_ids = batch["input_ids"].to(
+            "cuda" if torch.cuda.is_available() else "cpu")
         output_tokens = model.generate(
             input_ids=input_ids,
             max_new_tokens=params.max_length,  # 512

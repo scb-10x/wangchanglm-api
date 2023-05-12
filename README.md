@@ -60,3 +60,9 @@ pinned: false
 1. build docker as in build docker section and 
 2. run docker as run docker section
 
+# install git-lfs
+
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+    sudo apt-get install git-lfs
+
+    
