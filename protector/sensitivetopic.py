@@ -68,6 +68,17 @@ class SensitiveTopicProtector:
         return topic_embeddings
 
     def filter(self, text: str) -> Tuple[bool, str]:
+        """
+        Filter sensitive topics from text.
+
+        Args:
+            text (str): The input text to filter.
+
+        Returns:
+            Tuple[bool, str]: A tuple containing a boolean value indicating
+            whether the text is sensitive (is_sensitive) and a response
+            message (respond_message).
+        """
         is_sensitive, respond_message = False, None
         text_embedding = self.encoder.encode([text,])
         for topic in self.sensitive_topics:
