@@ -39,7 +39,7 @@ class SensitiveTopic:
     adhoc_embeded_demonstrations: np.array = None # dimension = [N_ADHOC, DIM]. Please kindly note that this suppose to 
 
 
-DEFAULT_SENSITIVITY = 0.7
+DEFAULT_SENSITIVITY = 0.4
 
 
 class SensitiveTopicProtector:
