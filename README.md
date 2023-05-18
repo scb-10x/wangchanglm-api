@@ -58,6 +58,12 @@ pinned: false
 6. Create
 
 ## ssh into the vm and build
+
 1. clone this repo
 2. build docker: `./scripts/build.sh`
 3. run docker: `./scripts/start.sh`
+
+# install git-lfs
+
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+    sudo apt-get install git-lfs
