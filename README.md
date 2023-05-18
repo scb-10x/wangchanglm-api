@@ -17,8 +17,10 @@ pinned: false
 
     mkdir .cache #optional
     chmod 777 .cache #optional
+    
     # on cpu
     docker run --restart unless-stopped -p 80:7860 -v `pwd`/.cache:/home/user/.cache -dt scb10x/thaillm
+
     # on gpu
     docker run --gpus all --restart unless-stopped -p 80:7860 -v `pwd`/.cache:/home/user/.cache -dt scb10x/thaillm
 
@@ -57,12 +59,11 @@ pinned: false
 
 ## ssh into the vm and build
 
-1. build docker as in build docker section and 
-2. run docker as run docker section
+1. clone this repo
+2. build docker: `./scripts/build.sh`
+3. run docker: `./scripts/start.sh`
 
 # install git-lfs
 
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
     sudo apt-get install git-lfs
-
-    
