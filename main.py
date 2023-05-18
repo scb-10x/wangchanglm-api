@@ -23,7 +23,7 @@ app = FastAPI()
 #                 model="pythainlp/wangchanglm-7.5B-sft-enth", load_in_8bit=True,
 #                 offload_folder="./",
 #                 low_cpu_mem_usage=True,)
-model_name = "pythainlp/wangchanglm-7.5B-sft-enth"
+model_name = "pythainlp/wangchanglm-7.5B-sft-en"
 # model_name = "facebook/xglm-564M"
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
