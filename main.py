@@ -28,7 +28,7 @@ model_name = "pythainlp/wangchanglm-7.5B-sft-en"
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
     return_dict=False,
-    load_in_8bit=True,
+    load_in_8bit=False,
     device_map="auto",
     # load_in_8bit_fp32_cpu_offload=True,
     torch_dtype=torch.float16,
