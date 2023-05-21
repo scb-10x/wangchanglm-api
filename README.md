@@ -2,6 +2,8 @@
 
 API Service for the [WangChanGLM model](https://github.com/PyThaiNLP/WangChanGLM). More information about the model can be found [here](https://medium.com/airesearch-in-th/wangchanglm-the-thai-turned-multilingual-instruction-following-model-7aa9a0f51f5f).
 
+Pairs nicely with the [WangChanGLM App](https://github.com/scb-10x/wangchanglm-app).
+
 Try out the public demo at https://wangchanglm.in.th
 
 ## Build docker
