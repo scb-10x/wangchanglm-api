@@ -1,0 +1,36 @@
+# Contributing Guidelines
+
+Welcome to the wangchanglm-api repository! We appreciate your interest in contributing to our project. Please take a moment to review the guidelines outlined below to ensure a smooth and effective collaboration process.
+
+## Bug Reports and Feature Requests
+
+If you encounter a bug or have a feature request, please search the existing issues to check if it has already been reported. If not, feel free to open a new issue, providing as much detail as possible, including steps to reproduce the bug or a clear description of the requested feature. Follow the issue template and provide any relevant screenshots or error logs.
+
+## Pull Requests
+
+We welcome pull requests from the community. Before submitting a pull request, please ensure the following:
+
+1. Fork the repository and create a new branch for your changes.
+
+2. Follow the coding style and conventions used in the project.
+
+3. Include tests if applicable, ensuring that they pass.
+
+4. Provide a clear and descriptive title for your pull request.
+
+5. Describe your changes in detail, providing any necessary context or explanations.
+
+6. Reference any related issues or pull requests if applicable.
+
+7. Once submitted, your pull request will be reviewed by the maintainers. Please be patient, as it may take some time to receive feedback. We appreciate your understanding.
+
+## Code of Conduct
+
+We expect all contributors to adhere to our [Code of Conduct](CODE_OF_CONDUCT). Please review it to understand our expectations for respectful and inclusive behavior within our community.
+
+## License
+
+By contributing to this project, you agree that your contributions will be licensed under the [LICENSE](LICENSE) of this repository.
+
+We thank you for your interest in improving our project, and we look forward to your contributions!
+
