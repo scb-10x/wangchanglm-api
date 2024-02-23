@@ -18,22 +18,13 @@ PROMPT_FORMATS = {
 
 app = FastAPI()
 
-# pipe = pipeline("text-generation", model="facebook/xglm-7.5B", revision="sharded")
-# pipe = pipeline("text-generation",
-#                 model="pythainlp/wangchanglm-7.5B-sft-enth", load_in_8bit=True,
-#                 offload_folder="./",
-#                 low_cpu_mem_usage=True,)
-model_name = "pythainlp/wangchanglm-7.5B-sft-en"
-# model_name = "facebook/xglm-564M"
+model_name = "/pretrained"
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
     return_dict=False,
     load_in_8bit=False,
     device_map="auto",
-    # load_in_8bit_fp32_cpu_offload=True,
     torch_dtype=torch.float16,
-    # offload_folder="./",
-    # low_cpu_mem_usage=True,
 )
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
@@ -93,6 +84,10 @@ def format_prompt(params: GenerateParams):
 
 ### ROUTES ###
 
+@app.get('/healthz')
+def status_check():
+    return {'status': 'OK'}
+
 @app.post("/generate", response_model=ResponseParams)
 def generate(params: GenerateParams) -> ResponseParams:
     try:
@@ -134,6 +129,7 @@ def generate(params: GenerateParams) -> ResponseParams:
         )
         output = tokenizer.decode(output_tokens[0], skip_special_tokens=True)
         # output = pipe(f"{input.input}", max_length=input.max_length)
-        return {"status": "ok", "output": output, "prompt": prompt, "params": params}
+        return {"status": "ok", "output": output, "prompt": prompt, "params": dict(params)}
     except Exception as e:
         return {"status": "error", "message": f"{e}"}
+
